@@ -1,10 +1,6 @@
 name: Next.js Test
 
 on:
-    # mainとdevelopブランチへのpush時に実行
-    push:
-        branches: ["main", "develop"]
-
     # 作業ブランチからdevelopブランチへプルリクを出した時に実行
     pull_request:
         types: [opened, reopened]
