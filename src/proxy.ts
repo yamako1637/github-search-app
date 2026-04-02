@@ -1,12 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 
-export const middleware = async (request: NextRequest) => {
+export const proxy = async (request: NextRequest) => {
     const { nextUrl } = request;
     const { pathname } = nextUrl;
 
     // ルートパスにアクセスした場合、/searchにリダイレクトする
-    if (pathname === '/') {
+    if (pathname === '/' || pathname === '') {
         return NextResponse.redirect(new URL("/search", nextUrl))
     }
     return NextResponse.next();
 }
+
+// Proxyを実行するパスを指定
+export const config = {
+    matcher: [
+        '/((?!api|_next/static|_next/image|favicon.ico).*)',
+    ],
+};
