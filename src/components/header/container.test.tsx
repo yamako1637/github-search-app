@@ -1,7 +1,7 @@
-import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import { MantineProvider } from '@mantine/core';
-import HeaderPresentation from './presentational';
+import { render, screen } from "@testing-library/react";
+import "@testing-library/jest-dom";
+import { MantineProvider } from "@mantine/core";
+import HeaderPresentation from "./presentational";
 
 // MantineProviderでラップ
 const renderWithProvider = (ui: React.ReactNode) => {
@@ -12,8 +12,8 @@ const renderWithProvider = (ui: React.ReactNode) => {
     );
 };
 
-describe('headerPresentation', () => {
-    it('渡されたタイトルが正しくレンダリングされること', () => {
+describe("headerPresentation", () => {
+    it("渡されたタイトルが正しくレンダリングされること", () => {
         const title = "Github Search App";
         renderWithProvider(<HeaderPresentation title={title} />);
 
@@ -22,16 +22,16 @@ describe('headerPresentation', () => {
         expect(headerElement).toBeInTheDocument();
     });
 
-    it('headerタグが適切なクラスを持っていること', () => {
+    it("headerタグが適切なクラスを持っていること", () => {
         const { container } = renderWithProvider(<HeaderPresentation title="Test" />);
 
         // header要素を取得（querySelectorまたはroleで取得）
-        const headerTag = container.querySelector('header');
+        const headerTag = container.querySelector("header");
 
         // headerタグが存在するか
         expect(headerTag).toBeInTheDocument();
 
         // CSS Modulesのクラスが適用されているか
-        expect(headerTag).toHaveClass('header');
+        expect(headerTag).toHaveClass("header");
     });
 });

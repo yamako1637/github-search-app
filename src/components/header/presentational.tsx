@@ -1,0 +1,21 @@
+import { Group, Text } from "@mantine/core";
+import classes from "./header.module.css";
+import Link from "next/link";
+
+type HeaderProps = {
+    title: string;
+};
+
+export default function HeaderPresentation({ title }: HeaderProps) {
+    return (
+        <header className={classes.header}>
+            <Group h="100%" px="md">
+                <Link href="/search">
+                    <Text size="lg" fw={700}>
+                        {title}
+                    </Text>
+                </Link>
+            </Group>
+        </header>
+    );
+}
