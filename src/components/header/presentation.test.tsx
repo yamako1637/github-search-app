@@ -1,16 +1,7 @@
-import { render, screen } from "@testing-library/react";
+import MantineRenderProvider from '@/components/test/mantineRenderProvider';
 import "@testing-library/jest-dom";
-import { MantineProvider } from "@mantine/core";
 import HeaderPresentation from "./presentational";
-
-// MantineProviderでラップ
-const renderWithProvider = (ui: React.ReactNode) => {
-    return render(
-        <MantineProvider>
-            {ui}
-        </MantineProvider>
-    );
-};
+import { screen } from '@testing-library/react';
 
 // ヘッダーのタイトル
 const headerTitle = "Github Search App";
@@ -18,7 +9,7 @@ const topPath = "/search";
 
 describe("headerPresentation", () => {
     it("渡されたタイトルが正しくレンダリングされること", () => {
-        renderWithProvider(<HeaderPresentation title={headerTitle} />);
+        MantineRenderProvider(<HeaderPresentation title={headerTitle} />);
 
         // headerTitleの内容が画面内に存在するか
         const headerElement = screen.getByText(headerTitle);
@@ -26,7 +17,7 @@ describe("headerPresentation", () => {
     });
 
     it("headerタグが適切なクラスを持っていること", () => {
-        const { container } = renderWithProvider(<HeaderPresentation title={headerTitle} />);
+        const { container } = MantineRenderProvider(<HeaderPresentation title={headerTitle} />);
 
         // header要素を取得（querySelectorまたはroleで取得）
         const headerTag = container.querySelector("header");
@@ -39,7 +30,7 @@ describe("headerPresentation", () => {
     });
 
     it("ヘッダーのリンクが正しいhref属性を持っていること", () => {
-        renderWithProvider(<HeaderPresentation title={headerTitle} />);
+        MantineRenderProvider(<HeaderPresentation title={headerTitle} />);
 
         // リンク要素を取得
         const linkElement = screen.getByRole("link", { name: headerTitle });
