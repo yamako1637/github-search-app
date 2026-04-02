@@ -10,7 +10,8 @@ import {
     Avatar,
     Grid,
     Center,
-    Pagination as MantinePagination
+    Skeleton,
+    Pagination
 } from '@mantine/core';
 import Link from 'next/link';
 
@@ -39,7 +40,7 @@ export default function SearchPresentation({
 }: SearchPresenterProps) {
     return (
         <Container size="md" py="sm">
-            <Stack gap="xl">
+            <Stack gap="md">
                 {/* 検索バーおよびボタン */}
                 <SearchInput
                     query={query}
@@ -54,19 +55,22 @@ export default function SearchPresentation({
                 {/* 検索結果 */}
                 <Grid>
                     <Grid.Col span={{ base: 12 }}>
-                        <SearchList results={results} />
+                        {loading ? (
+                            <SearchSkeleton />
+                        ) : (
+                            <SearchList results={results} />
+                        )}
 
                         {/* 結果がある場合のみページネーションを表示 */}
                         {results.length > 0 && totalPages > 1 && (
                             <Center my="lg">
-                                <Pagination
+                                <SearchPagination
                                     activePage={activePage}
                                     totalPages={totalPages}
                                     onPageChange={onPageChange}
                                 />
                             </Center>
                         )}
-
                     </Grid.Col>
                 </Grid>
 
@@ -83,15 +87,20 @@ export function SearchInput({ query, onQueryChange, onSearch, loading }: SearchI
     return (
         <Group align="flex-end">
             <TextInput
-                label="Repository Name"
-                placeholder="e.g. react"
+                size={"md"}
+                placeholder="リポジトリ名を検索してください"
                 value={query}
                 onChange={(e) => onQueryChange(e.currentTarget.value)}
                 style={{ flex: 1 }}
                 onKeyDown={(e) => e.key === 'Enter' && onSearch()}
             />
-            <Button onClick={onSearch} loading={loading}>
-                Search
+            <Button
+                size={"md"}
+                w={120}
+                onClick={onSearch}
+                loading={loading}
+            >
+                検索
             </Button>
         </Group>
     );
@@ -151,14 +160,34 @@ export function SearchList({ results }: SearchListProps) {
 }
 
 type PaginationProps = Pick<SearchPresenterProps, 'activePage' | 'totalPages' | 'onPageChange'>;
-export function Pagination({ activePage, totalPages, onPageChange }: PaginationProps) {
+export function SearchPagination({ activePage, totalPages, onPageChange }: PaginationProps) {
     return (
         <Center my="lg">
-            <MantinePagination
+            <Pagination
                 total={totalPages}
                 value={activePage}
                 onChange={onPageChange}
             />
         </Center>
     )
+}
+
+export function SearchSkeleton({ count = 5 }: { count?: number }) {
+    return (
+        <>
+            {Array.from({ length: count }).map((_, index) => (
+                <Card key={index} shadow="none" padding="lg" radius="md" withBorder my="lg">
+                    <Group wrap="nowrap" gap="lg">
+                        {/* アバター部分のスケルトン */}
+                        <Skeleton height={60} circle />
+
+                        {/* テキスト部分のスケルトン */}
+                        <div style={{ flex: 1, overflow: 'hidden' }}>
+                            <Skeleton height={24} width="60%" radius="xl" />
+                        </div>
+                    </Group>
+                </Card>
+            ))}
+        </>
+    );
 }
