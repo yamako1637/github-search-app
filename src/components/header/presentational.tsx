@@ -1,6 +1,6 @@
-import { Group, Text } from '@mantine/core';
-import classes from './header.module.css';
-import Link from 'next/link';
+import { Group, Text } from "@mantine/core";
+import classes from "./header.module.css";
+import Link from "next/link";
 
 type HeaderProps = {
     title: string;
