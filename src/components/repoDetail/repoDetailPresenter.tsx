@@ -22,11 +22,6 @@ import {
 } from '@tabler/icons-react';
 import Link from "next/link";
 
-interface DetailPresentationProps {
-    detail: GitHubRepository | null;
-    errorMessage?: string;
-}
-
 /** 
  * リポジトリの詳細を表示するプレゼンテーションコンポーネント
  * @param detail DetailPresentationProps - リポジトリの詳細情報
@@ -59,39 +54,12 @@ export default function RepoDetailPresentation({ detail, errorMessage }: {
         </Container>
     );
 }
-
-/**
- * エラーメッセージを表示するコンポーネント
- * @param errorMessage string - エラーメッセージ
- * @returns エラーメッセージのコンポーネント
- */
-function ErrorCard({ errorMessage }: { errorMessage: string }) {
-    return (
-        <Center style={{ height: "50vh" }}>
-            <Card padding="md" radius="md" withBorder>
-                <Group align="center" mb="lg">
-                    <IconAlertCircle size={40} color="var(--mantine-color-red-6)" />
-                    <Box style={{ flex: 1 }}>
-                        <Title order={3} mb={"5px"}>エラー</Title>
-                        <Text c="dimmed">{errorMessage}</Text>
-                    </Box>
-                </Group>
-                <Link href="/" passHref>
-                    <Button w={"100%"} component="a" variant="outline" mt="md">
-                        戻る
-                    </Button>
-                </Link>
-            </Card>
-        </Center>
-    );
-}
-
 /**
  * リポジトリの詳細情報を表示するコンポーネント
  * @param detail GitHubRepository - リポジトリの詳細情報
  * @returns リポジトリの詳細情報
  */
-function DetailCard(props: {
+export function DetailCard(props: {
     avatar_url: string,
     name: string,
     language: string,
@@ -101,23 +69,33 @@ function DetailCard(props: {
     open_issues_count: number,
 }) {
     return (
-        <Card padding="md" radius="md" withBorder>
+        <Card padding="md" radius="md" withBorder data-testid="repository-detail-card">
             {/* ヘッダー部分: アイコン、名前、言語 */}
             <Group align="flex-start" mb="lg">
                 <Avatar
                     src={props.avatar_url}
                     size={80}
+                    aria-label="avatar url"
+                    data-testid="repository-avatar-url"
                 />
                 <Box style={{ flex: 1 }}>
                     <Title
                         order={2}
                         mb={"5px"}
                         style={{ wordBreak: 'break-all' }}
+                        aria-label="repository name"
+                        data-testid="repository-name"
                     >
                         {props.name}
                     </Title>
                     {props.language && (
-                        <Badge color="blue" variant="light" mt="5px">
+                        <Badge
+                            color="blue"
+                            variant="light"
+                            mt="5px"
+                            aria-label="language"
+                            data-testid="repository-language"
+                        >
                             {props.language}
                         </Badge>
                     )}
@@ -127,22 +105,41 @@ function DetailCard(props: {
             {/* 統計情報グリッド */}
             <SimpleGrid cols={{ base: 2, xs: 4 }} spacing="md">
                 <StatsItem
-                    icon={<IconStar size={20} color="orange" />}
+                    icon={<IconStar
+                        size={20}
+                        color="orange"
+                        aria-label="star icon"
+                        data-testid="star-icon"
+                    />}
                     label="Star数"
                     value={props.stargazers_count}
                 />
                 <StatsItem
-                    icon={<IconEye size={20} color="var(--mantine-color-blue-6)" />}
+                    icon={<IconEye
+                        size={20}
+                        color="var(--mantine-color-blue-6)"
+                        aria-label="eye icon"
+                        data-testid="eye-icon"
+                    />}
                     label="Watcher数"
                     value={props.watchers_count}
                 />
                 <StatsItem
-                    icon={<IconGitFork size={20} color="var(--mantine-color-gray-6)" />}
+                    icon={<IconGitFork
+                        size={20}
+                        color="var(--mantine-color-gray-6)"
+                        aria-label="git fork icon" data-testid="git-fork-icon"
+                    />}
                     label="Fork数"
                     value={props.forks_count}
                 />
                 <StatsItem
-                    icon={<IconAlertCircle size={20} color="var(--mantine-color-red-6)" />}
+                    icon={<IconAlertCircle
+                        size={20}
+                        color="var(--mantine-color-red-6)"
+                        aria-label="alert circle icon"
+                        data-testid="alert-circle-icon"
+                    />}
                     label="Issues数"
                     value={props.open_issues_count}
                 />
@@ -158,18 +155,71 @@ function DetailCard(props: {
  * @param value number - 各種カウント
  * @returns 
  */
-function StatsItem(props: { icon: React.ReactNode, label: string, value: number }) {
+export function StatsItem(props: {
+    icon: React.ReactNode,
+    label: string,
+    value: number,
+    dataTestId?: string
+}) {
     return (
-        <Paper withBorder p="xs" radius="md" ta="center">
-            <Group justify="center" gap={2} mb={2}>
+        <Paper
+            withBorder
+            p="xs"
+            radius="md"
+            ta="center"
+            data-testid="repository-stats-paper"
+        >
+            <Group
+                justify="center"
+                gap={2}
+                mb={2}
+                data-testid="repository-stats-item-icon"
+            >
                 {props.icon}
             </Group>
-            <Text size="xs" c="dimmed" fw={700}>
+            <Text
+                size="xs"
+                c="dimmed"
+                fw={700}
+                data-testid="repository-stats-item-label-text"
+            >
                 {props.label}
             </Text>
-            <Text fw={700} size="lg">
+            <Text
+                fw={700}
+                size="lg"
+                data-testid="repository-stats-item-value-text"
+            >
                 {props.value.toLocaleString()}
             </Text>
-        </Paper>
+        </Paper >
+    );
+}
+
+/**
+ * エラーメッセージを表示するコンポーネント
+ * @param errorMessage string - エラーメッセージ
+ * @returns エラーメッセージのコンポーネント
+ */
+export function ErrorCard({ errorMessage }: { errorMessage?: string }) {
+    return (
+        <Center style={{ height: "50vh" }}>
+            <Card padding="md" radius="md" data-testid="repository-detail-error-card" withBorder>
+                <Group align="center" mb="lg">
+                    <IconAlertCircle size={40} color="var(--mantine-color-red-6)" />
+                    <Box style={{ flex: 1 }}>
+                        <Title order={3} mb={"5px"}>エラー</Title>
+                        <Text c="dimmed" data-testid="repository-detail-error-text">
+                            {errorMessage ?? "予期せぬエラーが発生しました"}
+                        </Text>
+                    </Box>
+                </Group>
+                <Link href="/" passHref>
+                    <Button w={"100%"} component="a" variant="outline" mt="md">
+                        戻る
+                    </Button>
+                </Link>
+            </Card>
+        </Center>
     );
 }
