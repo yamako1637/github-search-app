@@ -1,6 +1,6 @@
 import "@testing-library/jest-dom";
 import { render, screen, } from "@/utils/tests/render";
-import RepoDetailPresentation, { DetailCard, ErrorCard, StatsItem } from "../repoDetailPresenter";
+import RepoDetailPresentation, { DetailCard, StatsItem } from "../repoDetailPresenter";
 import { repositoryMockResult } from "./mockData"
 import { IconStar } from "@tabler/icons-react";
 
@@ -156,28 +156,6 @@ describe("StatsItem", () => {
 
         // スター数
         expect(screen.getByText(value.toLocaleString()))
-            .toBeInTheDocument();
-    });
-});
-
-describe("ErrorCard", () => {
-    test("エラーメッセージの文字列が正しいか", () => {
-        const errorMessage = "エラーが発生しました"
-        render(
-            <ErrorCard
-                errorMessage={errorMessage}
-            />
-        );
-        expect(screen.getByText(errorMessage))
-            .toBeInTheDocument();
-    });
-
-    test("エラーメッセージがNULLの場合はデフォルトの文字列が表示されるか", () => {
-        const errorMessage = "予期せぬエラーが発生しました"
-        render(
-            <ErrorCard />
-        );
-        expect(screen.getByText(errorMessage))
             .toBeInTheDocument();
     });
 });
