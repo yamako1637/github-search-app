@@ -1,5 +1,5 @@
 import RepoDetailPresentation from "./repoDetailPresenter";
-import { fetchGitHubRepositoryDetail } from "@/utils/apis/gitHubRepositoryDetail";
+import { fetchGitHubRepositoryDetail } from "@/utils/apis/fetchGitHubRepositoryDetail";
 import { notFound } from "next/navigation"
 import { GitHubRepository } from "@/types/github";
 import { validateGitHubRepositoryDetail } from "@/utils/validations/gitHubRepositoryDetail";

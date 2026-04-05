@@ -1,11 +1,6 @@
 import { httpResponse } from "@/types/httpResponse";
 import { GitHubSearchResponse } from "@/types/github";
 
-const API_URL = process.env.NEXT_PUBLIC_GITHUB_API_URL;
-if (!API_URL) {
-    throw new Error("GitHub APIのURLが設定されていません。");
-}
-
 /**
  * GitHubのリポジトリを検索する
  * @param searchQuery 検索クエリ
@@ -25,7 +20,7 @@ export const fetchGitHubRepos = async (
         per_page: perPage.toString(),
     });
 
-    const res = await fetch(`${API_URL}/search/repositories?${params}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_GITHUB_API_URL}/search/repositories?${params}`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
         cache: "force-cache"
