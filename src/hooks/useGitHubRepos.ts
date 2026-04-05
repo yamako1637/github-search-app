@@ -30,9 +30,6 @@ export const useGitHubRepos = () => {
 
         const calcTotalPageHandler = (totalCount: number, maxResults: number, perPage: number): number => {
             const minTotalCount = Math.min(totalCount, maxResults);
-            // console.log(Math.ceil(minTotalCount / perPage));
-            console.log(`${minTotalCount} / ${perPage}`);
-
             return Math.ceil(minTotalCount / perPage);
         }
 
@@ -40,7 +37,6 @@ export const useGitHubRepos = () => {
             setResults([]);
             setTotalPages(0);
         }
-
         initFetch()
         const response = await fetchGitHubRepos(query, page, config.api.searchReposPerPage);
         setLoading(false);
