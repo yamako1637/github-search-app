@@ -14,13 +14,26 @@ export const useGitHubRepos = () => {
     const searchRepos = async (query: string, page: number) => {
         if (query.trim() === "") return;
         if (!validateGitHubRepos(query, page)) {
-            setError("入力された値が正しくありません")
+            setError("リクエストされた値が正しくありません")
             return
         }
         const initFetch = () => {
             setResults([]);
             setLoading(true);
             setError(null);
+        }
+
+        const notFoundHandler = () => {
+            resetHandler()
+            setError("検索条件に一致するリポジトリはありませんでした")
+        }
+
+        const calcTotalPageHandler = (totalCount: number, maxResults: number, perPage: number): number => {
+            const minTotalCount = Math.min(totalCount, maxResults);
+            // console.log(Math.ceil(minTotalCount / perPage));
+            console.log(`${minTotalCount} / ${perPage}`);
+
+            return Math.ceil(minTotalCount / perPage);
         }
 
         const resetHandler = () => {
@@ -30,25 +43,30 @@ export const useGitHubRepos = () => {
 
         initFetch()
         const response = await fetchGitHubRepos(query, page, config.api.searchReposPerPage);
+        setLoading(false);
         if (response.status === 200) {
             const data = response.data ? response.data as GitHubSearchResponse : null;
             if (!data) {
-                throw new Error("API呼び出し時にエラーが発生しました")
-            }
-            if (data.total_count === 0 || data.items.length === 0) {
-                resetHandler()
-                setError("検索条件に一致するリポジトリはありませんでした");
+                notFoundHandler()
+                return
+            } else if (data.total_count === 0 || data.items.length === 0) {
+                notFoundHandler()
                 return
             }
-            setResults(data.items);
-            const totalCount = Math.min(data.total_count, config.api.searchReposMaxResults);
-            setTotalPages(Math.ceil(totalCount / config.api.searchReposPerPage));
+            setResults(data?.items || []);
+            setTotalPages(
+                calcTotalPageHandler(
+                    data.total_count,
+                    config.api.searchReposMaxResults,
+                    config.api.searchReposPerPage,
+                )
+            )
+            return
         } else {
-            resetHandler()
             setError(response.message ?? "API呼び出し時にエラーが発生しました")
+            resetHandler()
             return
         }
-        setLoading(false);
     };
 
     return { results, loading, error, totalPages, searchRepos };
