@@ -13,8 +13,6 @@ export const useGitHubRepos = () => {
     // GitHubリポジトリを検索する
     const searchRepos = async (query: string, page: number) => {
         if (query.trim() === "") return;
-        console.log(!validateGitHubRepos(query, page));
-
         if (!validateGitHubRepos(query, page)) {
             setError("入力された値が正しくありません")
             return
