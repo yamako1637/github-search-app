@@ -13,8 +13,9 @@ export const useGitHubRepos = () => {
     // GitHubリポジトリを検索する
     const searchRepos = async (query: string, page: number) => {
         if (query.trim() === "") return;
-        if(!validateGitHubRepos(query)){
-            setError("入力値が正しくありません")
+        if (!validateGitHubRepos(query, page)) {
+            setError("入力された値が正しくありません")
+            return
         }
         const initFetch = () => {
             setResults([]);
@@ -34,9 +35,10 @@ export const useGitHubRepos = () => {
             if (!data) {
                 throw new Error("API呼び出し時にエラーが発生しました")
             }
-            if (data.total_count === 0) {
+            if (data.total_count === 0 || data.items.length === 0) {
                 resetHandler()
                 setError("検索条件に一致するリポジトリはありませんでした");
+                return
             }
             setResults(data.items);
             const totalCount = Math.min(data.total_count, config.api.searchReposMaxResults);
@@ -44,6 +46,7 @@ export const useGitHubRepos = () => {
         } else {
             resetHandler()
             setError(response.message ?? "API呼び出し時にエラーが発生しました")
+            return
         }
         setLoading(false);
     };
