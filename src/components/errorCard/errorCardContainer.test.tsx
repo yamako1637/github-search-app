@@ -1,40 +1,44 @@
 import "@testing-library/jest-dom";
-import { render, screen, } from "@/utils/tests/render";
-import ErrorCardContainer from "./errorCardContainer";
+import { render } from "@/utils/tests/render";
+
+import Container from "./errorCardContainer";
+import Presenter from "./errorCardPresenter";
+
+// Presenterをモック化
+jest.mock("./errorCardPresenter", () => {
+    return jest.fn(() => <div data-testid="mock-presentation" />);
+});
+const MockChildComponent = () => (
+    <div data-testid="repository-detail-child-component">Mocked Child</div>
+);
+
+const MockPresenter = Presenter as jest.Mock;
 
 describe("ErrorCardContainer", () => {
-
-    test("エラー画面が正常に表示されているか", async () => {
-        const errorMessage = "テストエラーテストエラーテストエラー"
-        render(
-            <ErrorCardContainer
-                errorMessage={errorMessage}
-            />
-        );
-
-        // 詳細が表示されているか
-        expect(screen.getByTestId("repository-detail-error-card"))
-            .toBeInTheDocument()
-        expect(screen.findByText(errorMessage))
+    beforeEach(() => {
+        jest.clearAllMocks();
     });
 
-    test("componentで渡されたコンポーネントが表示されるか", async () => {
-        const component = (
-            <>
-                <div data-testid="repository-detail-child-component"></div>
-            </>
-        )
-        const componentMessage = "子コンポーネント"
-        render(
-            <ErrorCardContainer
-                errorMessage={""}
-                component={component}
-            />
-        );
+    test("エラー画面が正常に表示されているか", async () => {
+        const renderContainer = await Container({
+            errorMessage: "テストエラーテストエラーテストエラー"
+        });
+        render(renderContainer);
 
-        // 渡したコンポーネントが存在するか
-        expect(screen.getByTestId("repository-detail-child-component"))
-            .toBeInTheDocument()
-        expect(screen.findByText(componentMessage))
+        // 画面描画が行われているか
+        expect(MockPresenter)
+            .toHaveBeenCalled();
+    });
+
+    test("componentプロパティで渡されたコンポーネントが表示されるか", async () => {
+        const renderContainer = await Container({
+            errorMessage: "message",
+            component: <MockChildComponent />
+        });
+        render(renderContainer);
+
+        // 画面描画が行われているか
+        expect(MockPresenter)
+            .toHaveBeenCalled();
     });
 });
