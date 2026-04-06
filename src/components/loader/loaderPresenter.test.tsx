@@ -1,6 +1,6 @@
 import "@testing-library/jest-dom";
 import { render, screen, } from "@/utils/tests/render";
-import LoaderPresenter from "../loaderPresenter";
+import LoaderPresenter from "./loaderPresenter";
 
 describe("LoaderPresenter", () => {
 
