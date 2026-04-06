@@ -21,7 +21,7 @@ export default function ErrorCardPresenter({ errorMessage, component }: { errorM
                 <Box style={{ flex: 1 }}>
                     <Title order={3} mb={"5px"}>エラー</Title>
                     <Text c="dimmed" data-testid="repository-detail-error-text">
-                        {errorMessage ?? "予期せぬエラーが発生しました"}
+                        {errorMessage}
                     </Text>
                 </Box>
             </Group>
