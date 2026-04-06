@@ -11,8 +11,8 @@ import {
     SimpleGrid,
     Paper,
     Box,
-    Button,
     Center,
+    Button
 } from "@mantine/core";
 import {
     IconStar,
@@ -20,7 +20,8 @@ import {
     IconGitFork,
     IconAlertCircle
 } from "@tabler/icons-react";
-import Link from "next/link";
+
+import ErrorCardContainer from "@/components/errorCard";
 
 /** 
  * リポジトリの詳細を表示するプレゼンテーションコンポーネント
@@ -46,9 +47,16 @@ export default function RepoDetailPresentation({ detail, errorMessage }: {
                         open_issues_count={detail.open_issues_count}
                     />
                 ) : (
-                    <ErrorCard
-                        errorMessage={errorMessage || "リポジトリの詳細情報を取得できませんでした。"}
-                    />
+                    <Center style={{ height: "50vh" }}>
+                        <ErrorCardContainer
+                            errorMessage={errorMessage || "リポジトリの詳細情報を取得できませんでした。"}
+                            component={(
+                                <Button w={"100%"} component="a" href="/" variant="outline" mt="md">
+                                    戻る
+                                </Button>
+                            )}
+                        />
+                    </Center>
                 )}
             </Stack>
         </Container>
@@ -193,33 +201,5 @@ export function StatsItem(props: {
                 {props.value.toLocaleString()}
             </Text>
         </Paper >
-    );
-}
-
-/**
- * エラーメッセージを表示するコンポーネント
- * @param errorMessage string - エラーメッセージ
- * @returns エラーメッセージのコンポーネント
- */
-export function ErrorCard({ errorMessage }: { errorMessage?: string }) {
-    return (
-        <Center style={{ height: "50vh" }}>
-            <Card padding="md" radius="md" data-testid="repository-detail-error-card" withBorder>
-                <Group align="center" mb="lg">
-                    <IconAlertCircle size={40} color="var(--mantine-color-red-6)" />
-                    <Box style={{ flex: 1 }}>
-                        <Title order={3} mb={"5px"}>エラー</Title>
-                        <Text c="dimmed" data-testid="repository-detail-error-text">
-                            {errorMessage ?? "予期せぬエラーが発生しました"}
-                        </Text>
-                    </Box>
-                </Group>
-                <Link href="/" passHref>
-                    <Button w={"100%"} component="a" variant="outline" mt="md">
-                        戻る
-                    </Button>
-                </Link>
-            </Card>
-        </Center>
     );
 }

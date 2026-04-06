@@ -1,9 +1,8 @@
 import { httpResponse } from "@/types/httpResponse";
 import { GitHubRepository } from "@/types/github";
 
-const API_URL = process.env.NEXT_PUBLIC_GITHUB_API_URL;
-if (!API_URL) {
-    throw new Error("GitHub APIのURLが設定されていません。");
+type Option = {
+    token?: string
 }
 
 /**
@@ -12,9 +11,9 @@ if (!API_URL) {
  * @param repo string - リポジトリ名
  * @returns Promise<httpResponse<GitHubRepository>> - レスポンス
  */
-export const fetchGitHubRepositoryDetail = async (owner: string, repo: string): Promise<httpResponse<GitHubRepository>> => {
-    const token = process.env.GITHUB_TOKEN;
-    const res = await fetch(`${API_URL}/repos/${owner}/${repo}`, {
+export const fetchGitHubRepositoryDetail = async (owner: string, repo: string, option?: Option): Promise<httpResponse<GitHubRepository>> => {
+    const token = option?.token || undefined
+    const res = await fetch(`${process.env.NEXT_PUBLIC_GITHUB_API_URL}/repos/${owner}/${repo}`, {
         headers: {
             // トークンがある場合はヘッダーに追加してレートリミットを緩和
             ...(token ? { Authorization: `Bearer ${token}` } : {}),

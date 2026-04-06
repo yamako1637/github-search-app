@@ -114,6 +114,7 @@ export function SearchInput({ query, onQueryChange, onSearch, loading }: SearchI
     return (
         <Group align="flex-end">
             <TextInput
+                id="search-input"
                 size={"md"}
                 placeholder="リポジトリ名を検索してください"
                 value={query}
@@ -123,6 +124,7 @@ export function SearchInput({ query, onQueryChange, onSearch, loading }: SearchI
                 onKeyDown={(e) => e.key === "Enter" && onSearch()}
             />
             <Button
+                id="search-button"
                 size={"md"}
                 w={120}
                 onClick={onSearch}

@@ -1,13 +1,13 @@
 import "@testing-library/jest-dom";
 import { render, screen, } from "@/utils/tests/render";
-import RepoDetailPresentation, { DetailCard, ErrorCard, StatsItem } from "../repoDetailPresenter";
-import { repositoryMockResult } from "./mockData"
+import Presenter, { DetailCard, StatsItem } from "./repoDetailPresenter";
+import { repositoryMockResult } from "@/utils/contains/tests/gitHubApi.mock"
 import { IconStar } from "@tabler/icons-react";
 
 describe("RepoDetailPresentation", () => {
     test("詳細情報が正常に表示できているか", async () => {
         render(
-            <RepoDetailPresentation
+            <Presenter
                 detail={repositoryMockResult}
             />
         );
@@ -24,7 +24,7 @@ describe("RepoDetailPresentation", () => {
 
     test("エラーメッセージが正常に表示できているか", () => {
         render(
-            <RepoDetailPresentation
+            <Presenter
                 detail={null}
                 errorMessage="エラーが発生しました"
             />
@@ -41,7 +41,7 @@ describe("RepoDetailPresentation", () => {
 
     test("デフォルトのエラーメッセージが表示できるか", () => {
         render(
-            <RepoDetailPresentation
+            <Presenter
                 detail={null}
             />
         );
@@ -156,28 +156,6 @@ describe("StatsItem", () => {
 
         // スター数
         expect(screen.getByText(value.toLocaleString()))
-            .toBeInTheDocument();
-    });
-});
-
-describe("ErrorCard", () => {
-    test("エラーメッセージの文字列が正しいか", () => {
-        const errorMessage = "エラーが発生しました"
-        render(
-            <ErrorCard
-                errorMessage={errorMessage}
-            />
-        );
-        expect(screen.getByText(errorMessage))
-            .toBeInTheDocument();
-    });
-
-    test("エラーメッセージがNULLの場合はデフォルトの文字列が表示されるか", () => {
-        const errorMessage = "予期せぬエラーが発生しました"
-        render(
-            <ErrorCard />
-        );
-        expect(screen.getByText(errorMessage))
             .toBeInTheDocument();
     });
 });
