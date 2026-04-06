@@ -3,8 +3,7 @@ import {
     Text,
     Group,
     Title,
-    Box,
-    Button,
+    Box
 } from "@mantine/core";
 import { IconAlertCircle } from "@tabler/icons-react";
 
