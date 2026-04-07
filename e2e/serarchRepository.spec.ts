@@ -1,7 +1,6 @@
 import { test, expect } from "@playwright/test";
 
 const pageTitle = "Github Search App"
-const targetRepositoryName = "/repos/yamako-maxq/search"
 const searchText = "search"
 
 test("検索ワードを入力したら、検索が表示できるか", async ({ page }) => {
