@@ -8,7 +8,10 @@
     "start": "next start",
     "lint": "eslint",
     "test": "jest",
-    "test:e2e": "playwright test"
+    "test:e2e:install": "playwright install --with-deps",
+    "test:e2e": "playwright test",
+    "test:e2e:report": "playwright show-report",
+    "test:e2e:mock": "json-server --watch ./test/mockServer/db.json --r ./test/mockServer/routes.json -p 3001"
   },
   "dependencies": {
     "@mantine/core": "^8.3.18",
@@ -34,6 +37,7 @@
     "eslint-config-next": "16.2.1",
     "jest": "^30.3.0",
     "jest-environment-jsdom": "^30.3.0",
+    "json-server": "^0.17.4",
     "postcss": "^8.5.8",
     "postcss-preset-mantine": "^1.18.0",
     "postcss-simple-vars": "^7.0.1",

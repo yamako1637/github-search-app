@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 
 const pageTitle = "Github Search App"
-const searchText = "search"
+const searchText = "github-search-app"
 
 test("検索ワードを入力したら、検索が表示できるか", async ({ page }) => {
   const response = await page.goto("/");
@@ -25,11 +25,11 @@ test("検索ワードを入力したら、検索が表示できるか", async ({
 
   // const link = await page.getByRole('link', { name: 'github-search-app' })
   const repoName = await page.getByRole('link', { name: 'search' }).nth(1).innerText()
-  expect(repoName).toBe("search")
+  expect(repoName).toBe(searchText)
 });
 
 test("クエリパラメータを付与してアクセスしても正常に操作できるか", async ({ page }) => {
-  const response = await page.goto("/search/repositories?q=/yamako-maxq/github-search-app&page=1");
+  const response = await page.goto(`/search/repositories?q=${searchText}&page=1`);
 
   // responseがNULLではない
   expect(response).not.toBeNull()
@@ -49,15 +49,14 @@ test("ページネーションが正しく動作するか", async ({ page }) => 
 
   // リポジトリを検索
   await page.getByRole("textbox", { name: "search-input" }).focus()
-  await page.keyboard.type("search");
+  await page.keyboard.type(searchText);
 
   // 検索ボタンクリック
   await page.getByRole("button", { name: "検索" }).click()
 
-  // 結果が表示されるまで待つ
-  await page.waitForTimeout(2000)
-
+  
   // 最後のページへスクロール
+  await page.waitForTimeout(1000)
   await page.keyboard.press('End')
   await page.waitForTimeout(1000)
 
@@ -65,7 +64,7 @@ test("ページネーションが正しく動作するか", async ({ page }) => 
   await page.getByRole('button', { name: '2' }).click()
 
   // 移動したらURLが変化しているか
-  expect(page).toHaveURL("/search/repositories?q=search&page=2")
+  expect(page).toHaveURL(`/search/repositories?q=${searchText}&page=2`)
 });
 
 test("検索結果をクリックしたらすると詳細にとべるか", async ({ page }) => {
