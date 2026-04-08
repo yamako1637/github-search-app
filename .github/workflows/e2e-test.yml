@@ -44,10 +44,13 @@ jobs:
           PORT: 3000
 
       - name: Wait for mock server to be ready
-        run: npx wait-on http://localhost:3001
+        run: curl -f http://localhost:3001
+      
+      - name: Wait for app to be ready
+        run: sleep 3
 
       - name: Wait for app to be ready
-        run: npx wait-on http://localhost:3000
+        run: curl -f http://localhost:3000
 
       - name: Run Playwright tests
         run: npm run test:e2e
