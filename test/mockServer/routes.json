@@ -2,5 +2,6 @@
     "/search/repositories?q=github-search-app&page=1&per_page=15": "/search",
     "/search/repositories?q=github-search-app&page=2&per_page=15": "/search",
     "/search/repositories?q=notfound&page=1&per_page=15": "/notfound",
-    "/repos/yamako-maxq/github-search-app": "/github-search-app"
+    "/repos/yamako-maxq/github-search-app": "/github-search-app",
+    "/": "/root"
 }

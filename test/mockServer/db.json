@@ -1,4 +1,7 @@
 {
+    "root": {
+        "status": "success"
+    },
     "search": {
         "total_count": 30,
         "incomplete_results": false,
